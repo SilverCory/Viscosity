@@ -1,0 +1,9 @@
+name: Viscosity
+main: co.ryred.dev.viscosity.bukkit.ViscosityPlugin
+version: 1.0.0-SNAPSHOT
+api-version: 1.16
+description: Does things.
+author: Cory Redmond
+depend:
+  - ProtocolLib
+load: STARTUP

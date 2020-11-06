@@ -1,0 +1,5 @@
+rootProject.name = 'viscosity'
+include 'api'
+include 'bukkit'
+include 'all'
+

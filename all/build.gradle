@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+
+ext.getArchiveFileName = { String original ->
+    if (original.endsWith(".jar")) {
+        return original.substring(0, original.length() - 4)
+    }
+    return original
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    compile project(':api')
+    compile project(':bukkit')
+}
+
+shadowJar {
+    archiveBaseName.set(getArchiveFileName(jar.archiveFileName.get()))
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
