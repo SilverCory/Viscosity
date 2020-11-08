@@ -1,4 +1,4 @@
-package co.ryred.dev.viscosity.api.netty;
+package co.ryred.dev.viscosity.api.netty.server;
 
 import io.netty.channel.Channel;
 

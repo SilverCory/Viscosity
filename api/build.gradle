@@ -9,7 +9,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
     compileOnly 'org.projectlombok:lombok:1.18.16'
 
-    compileOnly "com.google.guava:guava:17.0"
-    compileOnly "com.google.code.gson:gson:2.5"
-    compileOnly group: 'io.netty', name: 'netty-codec-http', version: '4.1.43.Final'
+    implementation "com.google.guava:guava:17.0"
+    implementation "com.google.code.gson:gson:2.5"
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.43.Final'
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.43.Final'
 }

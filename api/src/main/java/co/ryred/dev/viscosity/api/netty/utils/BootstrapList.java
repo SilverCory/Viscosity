@@ -13,8 +13,8 @@ import java.util.concurrent.Callable;
 
 
 public class BootstrapList implements List<Object> {
-    private List<Object> delegate;
-    private ChannelHandler handler;
+    private final List<Object> delegate;
+    private final ChannelHandler handler;
 
     /**
      * Construct a new bootstrap list.

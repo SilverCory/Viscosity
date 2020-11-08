@@ -21,6 +21,7 @@ java {
 dependencies {
     compile project(':api')
     compile project(':bukkit')
+    compile project(':bungee')
 }
 
 shadowJar {

@@ -1,4 +1,4 @@
-package co.ryred.dev.viscosity.api.netty;
+package co.ryred.dev.viscosity.api.netty.server;
 
 import co.ryred.dev.viscosity.api.Viscosity;
 import io.netty.buffer.ByteBuf;
@@ -41,7 +41,7 @@ public class HTTPDecoder extends ByteToMessageDecoder {
             ctx.channel().config().setOption(ChannelOption.TCP_NODELAY, true);
 
             try {
-                while (p.removeLast() != null);
+                while (p.removeLast() != null) ;
             } catch (NoSuchElementException ignored) {
             }
 

@@ -1,8 +1,6 @@
 package co.ryred.dev.viscosity.api.frame;
 
-import co.ryred.dev.viscosity.api.gson.ByteArrayToBase64TypeAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import co.ryred.dev.viscosity.api.gson.GSONUtils;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,12 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FrameBus {
-
-    public static Gson GSON = new GsonBuilder().
-            enableComplexMapKeySerialization().
-            registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).
-            serializeNulls().
-            create();
 
     private final Map<Object, FrameListener> listenerByOwner = new HashMap<>();
     private final Map<String, Map<Byte, Map<Object, Method[]>>> byListenerAndPriority = new HashMap<>();
@@ -38,7 +30,7 @@ public class FrameBus {
     }
 
     public void processFrame(TextWebSocketFrame textWebSocketFrame) {
-        Frame identifierFrame = GSON.fromJson(textWebSocketFrame.text(), Frame.class);
+        Frame identifierFrame = GSONUtils.getGSON().fromJson(textWebSocketFrame.text(), Frame.class);
         post(identifierFrame);
     }
 
@@ -49,7 +41,7 @@ public class FrameBus {
             for (FrameHandlerMethod method : handlers) {
                 try {
                     Class<?> frameType = method.getMethod().getParameterTypes()[0];
-                    Object contents = GSON.fromJson(frame.getContents(), frameType);
+                    Object contents = GSONUtils.getGSON().fromJson(frame.getContents(), frameType);
                     method.invoke(contents);
                 } catch (IllegalAccessException ex) {
                     throw new Error("Method became inaccessible: " + frame, ex);

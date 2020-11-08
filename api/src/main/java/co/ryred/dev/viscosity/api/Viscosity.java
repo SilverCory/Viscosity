@@ -1,12 +1,14 @@
 package co.ryred.dev.viscosity.api;
 
+import co.ryred.dev.viscosity.api.connection.ConnectionManager;
 import co.ryred.dev.viscosity.api.frame.FrameBus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Closeable;
 import java.util.logging.Logger;
 
-public abstract class Viscosity {
+public abstract class Viscosity implements Closeable {
 
     @Getter
     @Setter
@@ -19,12 +21,20 @@ public abstract class Viscosity {
     private final Logger logger;
 
     @Getter
-    private final String authToken;
+    private final IAuthTokenSupplier authToken;
 
-    public Viscosity(Logger logger, String authToken) {
+    @Getter
+    private final ConnectionManager connectionManager;
+
+    public Viscosity(Logger logger, IAuthTokenSupplier authToken) {
         this.logger = logger;
         this.frameBus = new FrameBus(logger);
         this.authToken = authToken;
+        this.connectionManager = new ConnectionManager(this);
     }
 
+    @Override
+    public void close() {
+        this.connectionManager.close();
+    }
 }

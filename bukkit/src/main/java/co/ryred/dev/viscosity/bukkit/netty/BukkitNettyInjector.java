@@ -1,7 +1,7 @@
 package co.ryred.dev.viscosity.bukkit.netty;
 
-import co.ryred.dev.viscosity.api.netty.HTTPDecoder;
-import co.ryred.dev.viscosity.api.netty.NettyInjector;
+import co.ryred.dev.viscosity.api.netty.server.HTTPDecoder;
+import co.ryred.dev.viscosity.api.netty.server.NettyInjector;
 import co.ryred.dev.viscosity.api.netty.utils.BootstrapList;
 import co.ryred.dev.viscosity.bukkit.ViscosityBukkit;
 import com.comphenix.protocol.reflect.FuzzyReflection;
