@@ -3,9 +3,9 @@ package co.ryred.dev.viscosity.api.netty.server;
 import co.ryred.dev.viscosity.api.Viscosity;
 import co.ryred.dev.viscosity.api.connection.ConnectionDetails;
 import co.ryred.dev.viscosity.api.netty.WebSocketHandler;
+import co.ryred.dev.viscosity.api.netty.utils.HTTPHeaderNames;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
@@ -39,15 +39,15 @@ public class HTTPServerHandler extends ChannelInboundHandlerAdapter {
         }
         ctx.channel().attr(ConnectionDetails.ATTRIBUTE_KEY_SERVER_NAME).set(serverName.trim());
 
-        String token = headers.get(HttpHeaderNames.AUTHORIZATION);
+        String token = headers.get(HTTPHeaderNames.AUTHORIZATION);
         if (!token.equals(viscosity.getAuthToken().get(serverName))) {
             viscosity.getLogger().warning("Attempted connection had bad auth token: " + token);
             ctx.close();
             return;
         }
 
-        if ("Upgrade".equalsIgnoreCase(headers.get(HttpHeaderNames.CONNECTION)) &&
-                "WebSocket".equalsIgnoreCase(headers.get(HttpHeaderNames.UPGRADE))) {
+        if ("Upgrade".equalsIgnoreCase(headers.get(HTTPHeaderNames.CONNECTION)) &&
+                "WebSocket".equalsIgnoreCase(headers.get(HTTPHeaderNames.UPGRADE))) {
             ctx.pipeline().replace(this, "websocketHandler", new WebSocketHandler(viscosity));
             handleHandshake(ctx, httpRequest);
         }
@@ -70,6 +70,6 @@ public class HTTPServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     protected String getWebSocketURL(HttpRequest req) {
-        return "ws://" + req.headers().get("Host") + req.uri();
+        return "ws://" + req.headers().get("Host") + req.getUri();
     }
 }

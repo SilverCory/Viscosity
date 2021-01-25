@@ -29,8 +29,7 @@ public class BukkitNettyInjector extends NettyInjector {
     }
 
     public synchronized void inject() {
-        if (injected)
-            throw new IllegalStateException("Cannot inject twice.");
+        if (injected) throw new IllegalStateException("Cannot inject twice.");
         try {
             FuzzyReflection fuzzyServer = FuzzyReflection.fromClass(MinecraftReflection.getMinecraftServerClass());
             Method serverConnectionMethod = fuzzyServer.getMethodByParameters("getServerConnection", MinecraftReflection.getServerConnectionClass(), new Class[]{});
@@ -76,9 +75,7 @@ public class BukkitNettyInjector extends NettyInjector {
             };
 
             // Get the current NetworkMananger list
-
             this.networkManagers = getNetworkManagers(serverConnection);
-            ;
 
             // Insert ProtocolLib's connection interceptor
             this.bootstrapFields = getBootstrapFields(serverConnection);
@@ -169,18 +166,20 @@ public class BukkitNettyInjector extends NettyInjector {
      * Clean up any remaning injections.
      */
     public synchronized void close() {
-        if (!closed) {
-            closed = true;
+        if (closed) {
+            return;
+        }
 
-            for (VolatileField field : bootstrapFields) {
-                Object value = field.getValue();
+        closed = true;
 
-                // Undo the processed channels, if any
-                if (value instanceof BootstrapList) {
-                    ((BootstrapList) value).close();
-                }
-                field.revertValue();
+        for (VolatileField field : bootstrapFields) {
+            Object value = field.getValue();
+
+            // Undo the processed channels, if any
+            if (value instanceof BootstrapList) {
+                ((BootstrapList) value).close();
             }
+            field.revertValue();
         }
     }
 }

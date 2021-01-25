@@ -66,7 +66,7 @@ public class ClientHandshakeHandler extends SimpleChannelInboundHandler<Object> 
         if (msg instanceof FullHttpResponse) {
             FullHttpResponse response = (FullHttpResponse) msg;
             throw new IllegalStateException(
-                    "Unexpected FullHttpResponse (getStatus=" + response.status() +
+                    "Unexpected FullHttpResponse (getStatus=" + response.getStatus() +
                             ", content=" + response.content().toString(CharsetUtil.UTF_8) + ')');
         }
     }

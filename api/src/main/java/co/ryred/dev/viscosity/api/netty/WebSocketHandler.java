@@ -1,6 +1,7 @@
 package co.ryred.dev.viscosity.api.netty;
 
 import co.ryred.dev.viscosity.api.Viscosity;
+import co.ryred.dev.viscosity.api.netty.utils.WebSocketCloseStatus;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.websocketx.*;
@@ -20,32 +21,28 @@ public class WebSocketHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         super.handlerAdded(ctx);
-        System.out.println("handler added.");
         viscosity.getConnectionManager().registerConnection(ctx.channel());
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        // This shouldn't get called? O_o
         super.channelActive(ctx);
-
-        System.out.println("handler active.");
         viscosity.getConnectionManager().registerConnection(ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        System.out.println("handler inactive.");
         viscosity.getConnectionManager().unregisterConnection(ctx.channel());
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        System.out.println("handler read.");
         if (!(msg instanceof WebSocketFrame)) {
-            // TODO LOG??
+            viscosity.getLogger().warning("Unsupported message received: " + msg.getClass());
             ctx.write(new CloseWebSocketFrame(
-                    WebSocketCloseStatus.INTERNAL_SERVER_ERROR,
+                    WebSocketCloseStatus.INTERNAL_SERVER_ERROR.code(),
                     "msg not instance of WebsSocketFrame"
             ));
             ctx.close();
@@ -56,7 +53,7 @@ public class WebSocketHandler extends ChannelInboundHandlerAdapter {
         if (frame instanceof BinaryWebSocketFrame) {
             // Binary frame not supported.
             ctx.write(new CloseWebSocketFrame(
-                    WebSocketCloseStatus.INVALID_MESSAGE_TYPE,
+                    WebSocketCloseStatus.INVALID_MESSAGE_TYPE.code(),
                     "binary frame not supported."
             ));
             ctx.close();

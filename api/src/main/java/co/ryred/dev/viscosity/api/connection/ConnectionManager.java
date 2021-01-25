@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class ConnectionManager implements Closeable {
 
@@ -33,7 +34,7 @@ public class ConnectionManager implements Closeable {
         );
         ViscosityConnection connection = new ViscosityConnection(details, ch);
         ViscosityConnection oldCon = connectionByDetails.put(details, connection);
-        if (oldCon != null) oldCon.close();
+        if (oldCon != null && ch.equals(oldCon.getChannel())) oldCon.close();
 
         ch.attr(ConnectionDetails.ATTRIBUTE_KEY).set(details);
     }
@@ -88,7 +89,11 @@ public class ConnectionManager implements Closeable {
     @Override
     public void close() {
         for (ViscosityConnection con : connectionByDetails.values()) {
-            con.close();
+            try {
+                con.close();
+            } catch (Exception ex) {
+                viscosity.getLogger().log(Level.WARNING, "Unable to close connection to " + con.getConnectionDetails().getServerName(), ex);
+            }
         }
     }
 }

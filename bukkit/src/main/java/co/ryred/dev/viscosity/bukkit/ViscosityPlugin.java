@@ -26,6 +26,7 @@ public class ViscosityPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.injector.close();
+        this.viscosity.close();
         if (this.viscosity == Viscosity.getAPI()) {
             Viscosity.setAPI(null);
         }

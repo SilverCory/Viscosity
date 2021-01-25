@@ -1,0 +1,5 @@
+name: Viscosity
+main: co.ryred.dev.viscosity.bungee.ViscosityPlugin
+version: 1.0.0-SNAPSHOT
+description: Does things.
+author: Cory Redmond

@@ -11,6 +11,6 @@ dependencies {
 
     implementation "com.google.guava:guava:17.0"
     implementation "com.google.code.gson:gson:2.5"
-    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.43.Final'
-    implementation group: 'io.netty', name: 'netty-all', version: '4.1.43.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.0.50.Final'
+    implementation group: 'io.netty', name: 'netty-all', version: '4.0.56.Final'
 }

@@ -1,5 +1,6 @@
 package co.ryred.dev.viscosity.bungee;
 
+import co.ryred.dev.viscosity.api.Viscosity;
 import co.ryred.dev.viscosity.bungee.config.ViscosityConfiguration;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -10,6 +11,7 @@ public class ViscosityPlugin extends Plugin {
 
     private boolean failed = false;
     private ViscosityConfiguration config;
+    private ViscosityBungee viscosity;
 
     @Override
     public void onLoad() {
@@ -23,11 +25,15 @@ public class ViscosityPlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        if (failed) return;
+        this.viscosity = new ViscosityBungee(getLogger(), "HELLO WORLD");
     }
 
     @Override
     public void onDisable() {
+        this.viscosity.close();
+        if (this.viscosity == Viscosity.getAPI()) {
+            Viscosity.setAPI(null);
+        }
     }
 
 }

@@ -2,9 +2,13 @@ package co.ryred.dev.viscosity.api.connection;
 
 import co.ryred.dev.viscosity.api.frame.Frame;
 import co.ryred.dev.viscosity.api.gson.GSONUtils;
+import co.ryred.dev.viscosity.api.netty.utils.WebSocketCloseStatus;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.*;
+import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +43,12 @@ public class ViscosityConnection implements Closeable {
 
     @Override
     public void close() {
-        if (!channel.isWritable()) return;
-        channel.writeAndFlush(new CloseWebSocketFrame(
-                WebSocketCloseStatus.NORMAL_CLOSURE,
-                "Connection closed."
-        ));
+        if (channel.isWritable()) {
+            channel.writeAndFlush(new CloseWebSocketFrame(
+                    WebSocketCloseStatus.NORMAL_CLOSURE.code(),
+                    "Connection closed."
+            ));
+        }
         channel.close();
     }
 }
