@@ -20,6 +20,7 @@ public class ConnectionDetails {
     private final String serverName;
 
     private long lastPingTime;
+    private long lastPongTime;
     private long latency;
 
     public String toString() {
@@ -28,6 +29,7 @@ public class ConnectionDetails {
                 .append("\tremoteAddress: ").append(remoteAddress).append("\n")
                 .append("\tconnectionTime: ").append(connectionTime).append("\n")
                 .append("\tlastPingTime: ").append(lastPingTime).append("\n")
+                .append("\tlastPongTime: ").append(lastPongTime).append("\n")
                 .append("\tlatency: ").append(latency).append("ms")
                 .toString();
     }

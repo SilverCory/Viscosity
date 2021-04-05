@@ -9,14 +9,14 @@ allprojects {
 
     repositories {
         mavenLocal()
-        maven { url "https://hub.spigotmc.org/nexus/content/groups/public/" }
-        maven { url "http://repo.dmulloy2.net/content/groups/public/" }
-        maven { url 'https://repo.spongepowered.org/maven' }
         mavenCentral()
         jcenter()
         flatDir {
             dirs 'dependencies'
         }
+        maven { url "https://hub.spigotmc.org/nexus/content/groups/public/" }
+        maven { url "http://repo.dmulloy2.net/content/groups/public/" }
+        maven { url 'https://repo.spongepowered.org/maven' }
     }
 }
 

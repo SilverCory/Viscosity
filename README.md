@@ -28,10 +28,10 @@ How?
 
 Viscosity uses websockets on the already open and configured port of the minecraft server.
 
-This allows for minimal configuration and the avoidance of several issues outlined above.
+This allows for a minimal configuration, and the avoidance of several issues outlined above.
 
 ### Setup
-<!-- TODO -->
+<!-- TODO --><small>(Yet to be implemented)</small>
 1. Install all bukkit plugins (Viscosity and ProtocolLib).
 2. Install all bungee plugins (Viscosity).
 3. Join the proxy and server you wish to configure.

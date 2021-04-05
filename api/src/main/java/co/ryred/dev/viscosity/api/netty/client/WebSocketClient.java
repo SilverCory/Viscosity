@@ -19,15 +19,16 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 public class WebSocketClient {
 
     public WebSocketClient(Viscosity viscosity, String serverName, InetSocketAddress addr, EventLoopGroup eventLoopGroup) throws Throwable {
 
         HttpHeaders headers = new DefaultHttpHeaders();
+        // TODO pretty sure this is unconventional, we can probably bypass this ezpz?
         headers.add(HTTPHeaderNames.AUTHORIZATION, viscosity.getAuthToken().get(serverName));
         headers.add("Server-Name", serverName);
-
         System.out.println(addr.getHostString() + ":" + addr.getPort());
 
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(
@@ -53,9 +54,13 @@ public class WebSocketClient {
                     }
                 })
                 .connect(addr)
-                .sync();
+                .sync(); // TODO I think this sync can go since we're awaiting.
+
+        // Timeout.
+        if (!result.await(20, TimeUnit.SECONDS)) {
+            result.cancel(true);
+        }
 
         if (!result.isSuccess()) throw result.cause();
     }
-
 }

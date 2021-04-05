@@ -29,15 +29,15 @@ public class ClientHandshakeHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        super.handlerAdded(ctx);
         this.channelFuture = ctx.newPromise();
         ctx.channel().attr(ConnectionDetails.ATTRIBUTE_KEY_SERVER_NAME).set(this.serverName);
+        super.handlerAdded(ctx);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        handshaker.handshake(ctx.channel()).sync();
         super.channelActive(ctx);
-        handshaker.handshake(ctx.channel());
     }
 
     @Override

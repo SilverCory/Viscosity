@@ -34,7 +34,7 @@ public class ConnectionManager implements Closeable {
         );
         ViscosityConnection connection = new ViscosityConnection(details, ch);
         ViscosityConnection oldCon = connectionByDetails.put(details, connection);
-        if (oldCon != null && ch.equals(oldCon.getChannel())) oldCon.close();
+        if (oldCon != null && ch.equals(oldCon.getChannel())) oldCon.close(); // Shut down the old connection.
 
         ch.attr(ConnectionDetails.ATTRIBUTE_KEY).set(details);
     }
@@ -63,9 +63,7 @@ public class ConnectionManager implements Closeable {
     }
 
     public void ping() {
-        connectionByDetails.forEach((key, value) -> {
-            value.ping();
-        });
+        connectionByDetails.forEach((key, value) -> value.ping());
     }
 
     public void pong(Channel ch, PongWebSocketFrame frame) {
@@ -84,6 +82,7 @@ public class ConnectionManager implements Closeable {
         }
 
         connectionDetails.setLatency(now - pingTime);
+        connectionDetails.setLastPongTime(now);
     }
 
     @Override

@@ -20,21 +20,21 @@ public class WebSocketHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        super.handlerAdded(ctx);
         viscosity.getConnectionManager().registerConnection(ctx.channel());
+        super.handlerAdded(ctx);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        viscosity.getConnectionManager().registerConnection(ctx.channel());
         // This shouldn't get called? O_o
         super.channelActive(ctx);
-        viscosity.getConnectionManager().registerConnection(ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
         viscosity.getConnectionManager().unregisterConnection(ctx.channel());
+        super.channelInactive(ctx);
     }
 
     @Override
@@ -74,16 +74,15 @@ public class WebSocketHandler extends ChannelInboundHandlerAdapter {
 
         // Process pong.
         if (frame instanceof PongWebSocketFrame) {
-            System.out.println("Ponged");
             this.viscosity.getConnectionManager().pong(ctx.channel(), ((PongWebSocketFrame) frame));
             return;
         }
 
         // Handle close TODO
         if (frame instanceof CloseWebSocketFrame) {
-            System.out.println("CloseWebSocketFrame Received : ");
-            System.out.println("ReasonText :" + ((CloseWebSocketFrame) msg).reasonText());
-            System.out.println("StatusCode : " + ((CloseWebSocketFrame) msg).statusCode());
+            viscosity.getLogger().warning("CloseWebSocketFrame Received : ");
+            viscosity.getLogger().warning("ReasonText :" + ((CloseWebSocketFrame) msg).reasonText());
+            viscosity.getLogger().warning("StatusCode : " + ((CloseWebSocketFrame) msg).statusCode());
             ctx.close();
             return;
         }
